@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}AI Student Planner{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-brand">📘 Smart Planner</div>
+  <nav>
+    <a href="{{ url_for('dashboard') }}" class="{{ 'active' if active=='dashboard' else '' }}">🏠 Dashboard</a>
+    <a href="{{ url_for('timetable') }}" class="{{ 'active' if active=='timetable' else '' }}">📅 Timetable</a>
+    <a href="{{ url_for('marks') }}" class="{{ 'active' if active=='marks' else '' }}">📊 Academic Performance</a>
+    <a href="{{ url_for('assignments') }}" class="{{ 'active' if active=='assignments' else '' }}">📝 Assignments</a>
+    <a href="{{ url_for('exams') }}" class="{{ 'active' if active=='exams' else '' }}">📚 Exams</a>
+    <a href="{{ url_for('study_plan') }}" class="{{ 'active' if active=='study_plan' else '' }}">🤖 AI Study Plan</a>
+  </nav>
+</div>
+
+<div class="main">
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

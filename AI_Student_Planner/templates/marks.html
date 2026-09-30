@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Academic Performance - AI Student Planner{% endblock %}
+{% block content %}
+
+<h1>Academic Performance</h1>
+
+<div class="card">
+  <h2>Add / Update Subject Marks</h2>
+  <form method="POST" class="inline-form">
+    <input type="text" name="subject" placeholder="Subject" required>
+    <input type="number" step="0.1" min="0" name="internal_mark" placeholder="Internal Mark" required>
+    <input type="number" step="0.1" min="1" name="max_mark" placeholder="Out of" value="50" required>
+    <select name="difficulty" required>
+      <option value="Low">Low difficulty</option>
+      <option value="Medium" selected>Medium difficulty</option>
+      <option value="High">High difficulty</option>
+    </select>
+    <button type="submit" class="btn-primary">Save</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Subjects</h2>
+  {% if marks %}
+    <table class="data-table">
+      <tr><th>Subject</th><th>Mark</th><th>%</th><th>Difficulty</th><th>Performance</th><th></th></tr>
+      {% for m in marks %}
+      <tr>
+        <td>{{ m.subject }}</td>
+        <td>{{ m.internal_mark }} / {{ m.max_mark }}</td>
+        <td>{{ m.percent }}%</td>
+        <td>{{ m.difficulty }}</td>
+        <td><span class="badge badge-perf-{{ m.level|lower }}">{{ m.level }}</span></td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_marks', mark_id=m.id) }}">
+            <button type="submit" class="btn-delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="empty-state">No subjects added yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

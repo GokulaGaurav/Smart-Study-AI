@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - AI Student Planner{% endblock %}
+{% block content %}
+
+<h1>AI Smart Student Planner</h1>
+<p class="subtitle">Today is {{ today_name }}</p>
+
+{% if alerts %}
+<div class="alert-box">
+  {% for alert in alerts %}
+    <div>⚠️ {{ alert }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="grid-2">
+
+  <div class="card">
+    <h2>Today's Classes</h2>
+    {% if today_classes %}
+      <table class="data-table">
+        <tr><th>Time</th><th>Subject</th><th>Faculty</th><th>Room</th></tr>
+        {% for c in today_classes %}
+        <tr>
+          <td>{{ c.start_time }} - {{ c.end_time }}</td>
+          <td>{{ c.subject }}</td>
+          <td>{{ c.faculty }}</td>
+          <td>{{ c.classroom }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p class="empty-state">No classes scheduled for today.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Today's AI Study Plan</h2>
+    {% if study_plan %}
+      <table class="data-table">
+        <tr><th>Subject</th><th>Priority</th><th>Time</th></tr>
+        {% for p in study_plan %}
+        <tr>
+          <td>{{ p.subject }}</td>
+          <td><span class="badge badge-{{ p.priority_label|lower }}">{{ p.priority_label }}</span></td>
+          <td>{{ p.recommended_minutes }} min</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a href="{{ url_for('study_plan') }}" class="btn-link">View full study plan →</a>
+    {% else %}
+      <p class="empty-state">Add subjects under Academic Performance to get an AI study plan.</p>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Assignments - AI Student Planner{% endblock %}
+{% block content %}
+
+<h1>Assignment Management</h1>
+
+<div class="card">
+  <h2>Add Assignment</h2>
+  <form method="POST" class="inline-form">
+    <input type="text" name="title" placeholder="Assignment title" required>
+    <input type="text" name="subject" placeholder="Subject" required>
+    <input type="date" name="deadline" required>
+    <button type="submit" class="btn-primary">Add</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Assignments</h2>
+  {% if assignments %}
+    <table class="data-table">
+      <tr><th>Title</th><th>Subject</th><th>Deadline</th><th>Days Left</th><th>Status</th><th></th></tr>
+      {% for a in assignments %}
+      <tr>
+        <td>{{ a.title }}</td>
+        <td>{{ a.subject }}</td>
+        <td>{{ a.deadline }}</td>
+        <td>
+          {% if a.days_left < 0 %}Overdue{% else %}{{ a.days_left }} day(s){% endif %}
+        </td>
+        <td><span class="badge badge-{{ 'high' if a.status=='Pending' else 'low' }}">{{ a.status }}</span></td>
+        <td class="actions-cell">
+          {% if a.status == 'Pending' %}
+          <form method="POST" action="{{ url_for('complete_assignment', assignment_id=a.id) }}">
+            <button type="submit" class="btn-secondary-small">Mark Done</button>
+          </form>
+          {% endif %}
+          <form method="POST" action="{{ url_for('delete_assignment', assignment_id=a.id) }}">
+            <button type="submit" class="btn-delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="empty-state">No assignments added yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

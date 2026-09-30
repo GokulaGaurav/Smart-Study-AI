@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Timetable - AI Student Planner{% endblock %}
+{% block content %}
+
+<h1>Weekly Timetable</h1>
+
+<div class="card">
+  <h2>Add a Class</h2>
+  <form method="POST" class="inline-form">
+    <input type="text" name="subject" placeholder="Subject" required>
+    <select name="day" required>
+      {% for d in day_names %}<option value="{{ d }}">{{ d }}</option>{% endfor %}
+    </select>
+    <input type="time" name="start_time" required>
+    <input type="time" name="end_time" required>
+    <input type="text" name="faculty" placeholder="Faculty name">
+    <input type="text" name="classroom" placeholder="Classroom">
+    <button type="submit" class="btn-primary">Add</button>
+  </form>
+</div>
+
+{% for day in day_names %}
+<div class="card">
+  <h2>{{ day }}</h2>
+  {% if grouped[day] %}
+    <table class="data-table">
+      <tr><th>Time</th><th>Subject</th><th>Faculty</th><th>Room</th><th></th></tr>
+      {% for c in grouped[day] %}
+      <tr>
+        <td>{{ c.start_time }} - {{ c.end_time }}</td>
+        <td>{{ c.subject }}</td>
+        <td>{{ c.faculty }}</td>
+        <td>{{ c.classroom }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_class', class_id=c.id) }}">
+            <button type="submit" class="btn-delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="empty-state">No classes.</p>
+  {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

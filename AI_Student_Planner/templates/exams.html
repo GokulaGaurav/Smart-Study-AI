@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Exams - AI Student Planner{% endblock %}
+{% block content %}
+
+<h1>Exam Management</h1>
+
+<div class="card">
+  <h2>Add Exam</h2>
+  <form method="POST" class="inline-form">
+    <input type="text" name="subject" placeholder="Subject" required>
+    <input type="date" name="exam_date" required>
+    <button type="submit" class="btn-primary">Add</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Upcoming Exams</h2>
+  {% if exams %}
+    <table class="data-table">
+      <tr><th>Subject</th><th>Exam Date</th><th>Days Remaining</th><th></th></tr>
+      {% for e in exams %}
+      <tr>
+        <td>{{ e.subject }}</td>
+        <td>{{ e.exam_date }}</td>
+        <td>
+          {% if e.days_left < 0 %}
+            Completed
+          {% elif e.days_left <= 3 %}
+            <span class="badge badge-high">{{ e.days_left }} day(s)</span>
+          {% else %}
+            {{ e.days_left }} day(s)
+          {% endif %}
+        </td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_exam', exam_id=e.id) }}">
+            <button type="submit" class="btn-delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="empty-state">No exams added yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
